@@ -33,7 +33,7 @@ export default function SettingsPage(){
             }
           };
     return (
-        <div className="flex flex-col justify-center  p-5 gap-6 dark:text-white items-center">
+        <div className="flex flex-col justify-center  p-5 gap-6 dark:text-white items-center dark:bg-black">
             <h1 className="font-bold text-5xl ">Settings</h1>
             <h2 className="text-3xl font-bold mt-8 items-center justify-center flex ">Profile</h2>
 
@@ -73,7 +73,7 @@ export default function SettingsPage(){
 )}
       </div>
 
-            <div className="bg-gray-50 w-full rounded-lg shadow max-w-4xl p-6 dark:bg-gray-700 ">
+            <div className="bg-gray-50 w-full rounded-lg shadow max-w-4xl p-6 dark:bg-gray-800 ">
                 <form onSubmit="" className="flex flex-col space-y-4 w-full">
                     {[
                         { label: "Names", type: "text" },
