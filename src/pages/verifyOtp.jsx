@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Icon from "../assets/icon.png";
+import Icon from "../assets/logo.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -39,11 +39,11 @@ export default function VerifyEmail() {
 
   return (
     <div className="bg-[#f3f5ff] flex items-center justify-center w-screen min-h-screen p-6">
-      <div className="w-full max-w-3xl bg-white rounded-xl flex flex-col md:flex-row p-6 gap-8"> {/* Adjusted container width and padding */}
+      <div className="w-full max-w-3xl bg-white rounded-xl flex flex-col  p-6 gap-8"> {/* Adjusted container width and padding */}
         {/* Left Panel */}
-        <div className="md:w-1/2 w-full flex flex-col bg-slate-100 rounded-md p-6 justify-center items-center">
+        <div className=" w-full flex flex-col  rounded-md p-6 justify-center items-center">
           <div className="mb-6">
-            <img src={Icon} alt="CareConnect Logo" className="w-28 h-28" /> 
+           <img src={Icon} alt="Logo" className="h-12 w-auto" />
           </div>
           <h2 className="text-2xl font-bold text-gray-800">Email Verification</h2> {/* Larger heading */}
           <p className="text-sm text-center mt-4 text-gray-600 px-4">
@@ -52,7 +52,7 @@ export default function VerifyEmail() {
         </div>
 
         {/* Right Panel (Form) */}
-        <div className="md:w-1/2 w-full flex flex-col justify-center">
+        <div className=" w-full flex flex-col justify-center">
         <h2 className="flex justify-center items-center text-2xl font-bold mb-5">Enter the code.</h2>
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -89,7 +89,7 @@ export default function VerifyEmail() {
       }
     }}
     id={`digit-${index}`}
-    className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 w-8 text-center"
+    className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB640] w-8 text-center"
     placeholder="—"
   />
 ))}
@@ -105,15 +105,15 @@ export default function VerifyEmail() {
 
             <button
               type="submit"
-              className="mt-4 bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-200"
-              onClick={() => navigate("/createdoc")}
+              className="mt-4 bg-[#FFB640] text-white p-3 rounded-md hover:bg-[#ae7821] transition duration-200"
+              onClick={() => navigate("/login")}
             >
               Verify Email
             </button>
 
             <div className="text-sm text-gray-600 mt-2 text-center">
               Didn't receive a code?{" "}
-              <span className="text-blue-500 hover:underline cursor-pointer">
+              <span className="text-[#FFB640] hover:underline cursor-pointer">
                 Resend
               </span>
             </div>

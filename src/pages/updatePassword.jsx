@@ -34,7 +34,7 @@ export default function UpdatePassword() {
   };
 
   return (
-    <div className="flex items-center justify-center   ">
+    <div className="flex items-center justify-center  w-screen ">
       <div className="w-full max-w-xl bg-white rounded-xl flex flex-col p-6 gap-6 mt-20 dark:bg-gray-700">
         <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">
           Update Password
@@ -43,7 +43,7 @@ export default function UpdatePassword() {
           <input
             type="password"
             {...register("currentPassword")}
-            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB640]"
             placeholder="Current Password"
           />
           {errors.currentPassword && (
@@ -53,7 +53,7 @@ export default function UpdatePassword() {
           <input
             type="password"
             {...register("newPassword")}
-            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB640]"
             placeholder="New Password"
           />
           {errors.newPassword && (
@@ -63,7 +63,7 @@ export default function UpdatePassword() {
           <input
             type="password"
             {...register("confirm")}
-            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB640]"
             placeholder="Confirm New Password"
           />
           {errors.confirm && (
@@ -72,7 +72,7 @@ export default function UpdatePassword() {
 
           <button
             type="submit"
-            className="mt-2 bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-200"
+            className="mt-2 bg-[#FFB640] text-white p-3 rounded-md hover:bg-[#a2742b] transition duration-200"
           >
             Update Password
           </button>

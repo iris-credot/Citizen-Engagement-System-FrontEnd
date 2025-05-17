@@ -105,8 +105,8 @@ export default function SettingsPage(){
                         <label className="w-[70%] sm:text-2xl text-lg font-semibold">Update Password</label>
                         <button
                             type="button"
-                            onClick={() => navigate("/doctor/settings/update-pass")}
-                            className="bg-blue-500 text-white rounded-lg px-2 py-2 w-[20%] "
+                            onClick={() => navigate("/update-pass")}
+                            className="bg-[#FFB640] text-white rounded-lg px-2 py-2 w-[20%] "
                         >
                             Edit
                         </button>
@@ -118,7 +118,7 @@ export default function SettingsPage(){
                             onClick={toggleDarkMode}
                             className={`flex justify-center items-center sm:gap-2 gap-1 rounded-lg px-2 py-2 w-[20%] border transition duration-300 ${
                                 darkMode
-                                    ? "bg-blue-500 text-white border-blue-500"
+                                    ? "bg-[#FFB640] text-white border-[#FFB640"
                                     : "bg-white text-black border-black" 
                             }`}
                         >

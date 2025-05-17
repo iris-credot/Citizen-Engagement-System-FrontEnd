@@ -1,7 +1,7 @@
 import React from 'react';
 import {  Routes, Route } from 'react-router-dom';
 import './App.css'
-import Login from './pages/logIn';
+import Login from './pages/loginPage';
 import SignUp from './pages/signup';
 import VerifyEmail from './pages/verifyOtp';
 import ResetPassword from './pages/resetPassword';
@@ -13,55 +13,90 @@ import LayoutSuperAdmin from './layout/superAdminLayout';
 import NotFound from './pages/notFound';
 import Loading from './pages/loadingPage';
 ;import AdminDashboard from './pages/adminDashboard';
-import CiitizenDashboard from './pages/citizenDashboard';
+import CitizenDashboard from './pages/citizenDashboard';
 import SuperAdminDashboard from './pages/superAdminDashboard';
 import NotificationsPage from './pages/notifications';
 import SettingsPage from './pages/settings';
-import UpdatePassword from './pages/resetPassword';
-    
+import UpdatePassword from './pages/updatePassword';
+import HomePage from './pages/home';
+import ViewAgency from './pages/viewAgency';
+import ViewComplaint from './pages/viewComplaint';
+import ResponsesPage from './pages/responses';
+import ComplaintForm from './pages/complaintForm';
+import ComplaintsPage from './pages/complaintPage';
+import AgenciesPage from './pages/agencies';
+import AgencyProfile from './pages/agencyProfile';
+import ComplaintsAdmin from './pages/complaintsAdmin';
+import UpdateComplaint from './pages/updateComplaint';
+import ResponseForm from './pages/respondComplForm';
+import ChangeStatus from './pages/updateStatusComp';
+import ViewUser from './pages/viewUser';
+import AllComplaints from './pages/allComplaints';
+import CitizensPage from './pages/citizensPage';
+import AgencyAdmins from './pages/agency-Admins';
+import AllAgencies from './pages/agenciesPage';
 function App() {
-
+  
 
   return (
     <Routes>
     {/* Public routes */}
-    <Route path="/" element={<Login />} />
+    <Route path="/" element={<HomePage />} />
+    <Route path="/login" element={<Login />} />
     <Route path="/signup" element={<SignUp />} />
-    <Route path="/createdoc" element={<CreateDoctor />} />
     <Route path="/verify" element={<VerifyEmail />} />
     <Route path="/forgotpass" element={<ForgotPassword />} />
     <Route path="/resetpass" element={<ResetPassword />} />
     <Route path="/loading" element={<Loading />} />
     <Route path="*" element={<NotFound />} />
 
-    {/* Protected / Doctor Layout Routes */}
-    <Route path="/doctor" element={<LayoutDoctor />}>
-      <Route path="dashboard" element={<DoctorDashboard />} />
-      <Route path="appointments" element={<AppointmentsDoctor />} />
-      <Route path="appointments/create-appointment" element={<CreateAppointment />} />
-      <Route path="sportNutri" element={<FoodsSports />} />
-      <Route path="sportNutri/add-Food" element={<AddFood />} />
-      <Route path="sportNutri/add-Sport" element={<AddSport />} />
+    <Route path="update-pass" element={<UpdatePassword />} />
+    <Route path="view-complaint" element={<ViewComplaint />} />
+    <Route path="view-user" element={<ViewUser />} />
+    {/* Protected / Citizen Layout Routes */}
+   
+    <Route path="view-agency" element={<ViewAgency />} />
+    <Route path="update-complaint" element={<UpdateComplaint />} />
+
+    <Route path="/citizen" element={<LayoutCitizen />}>
+      <Route path="dashboard" element={<CitizenDashboard />} />
+      <Route path="complaint-form" element={<ComplaintForm />} />
+      <Route path="complaints" element={<ComplaintsPage />} />
+      <Route path="responses" element={<ResponsesPage />} />
+      <Route path="agencies" element={<AgenciesPage />} />
       <Route path="notifications" element={<NotificationsPage />} />
-      <Route path="patients" element={<PatientsPage />} />
-      <Route path="patients/view" element={<PatientsDetails />} />
-      <Route path="reports" element={<ReportsDoctor/>} />
       <Route path="settings" element={<SettingsPage />}/>
       <Route path="settings/update-pass" element={<UpdatePassword />} />
     </Route>
 
-     {/* Protected / Admin Layout Routes */}
-     <Route path="/admin" element={<LayoutAdmin />}>
-      <Route path="dashboard" element={<AdminDashboard />} />
-      <Route path="appointments" element={<AppointmentsAdmin />} />
-      <Route path="appointments/create-appointment" element={<CreateAppointment />} />
-      <Route path="doctors" element={<DoctorsPage />} />
+
+      {/* Protected / Admin Layout Routes */}
+      <Route path="respond-form" element={<ResponseForm />} />
+      <Route path="change-status" element={<ChangeStatus />} />
+
+      <Route path="/admin" element={<LayoutAdmin />}>
+      <Route path="dashboard" element={<AdminDashboard/>} />
+      <Route path="complaints" element={<ComplaintsAdmin/>} />
+      <Route path="profile" element={<AgencyProfile/>} />
       <Route path="notifications" element={<NotificationsPage />} />
-      <Route path="patients" element={<PatientsPage />} />
-      <Route path="patients/view" element={<PatientsDetails />} />
-      <Route path="reports" element={<ReportsAdmin />} />
+      <Route path="settings" element={<SettingsPage />}/>
+
+      
+    </Route>
+
+     {/* Protected / SuperAdmin Layout Routes */}
+     <Route path="createAdmin" element={<CreateAdmin />} />
+   
+
+     <Route path="/superAdmin" element={<LayoutSuperAdmin />}>
+      <Route path="dashboard" element={<SuperAdminDashboard />} />
+      <Route path="notifications" element={<NotificationsPage />} />
       <Route path="settings" element={<SettingsPage />} />
-      <Route path="settings/update-pass" element={<UpdatePassword />} />
+      <Route path="agencies" element={<AllAgencies />} />
+      <Route path="allComplaints" element={<AllComplaints />} />
+      <Route path="citizens" element={<CitizensPage />} />
+      <Route path="agency-admins" element={<AgencyAdmins />} />
+     
     </Route>
   </Routes>
   )
