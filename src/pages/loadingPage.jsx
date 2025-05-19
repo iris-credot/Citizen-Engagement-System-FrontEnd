@@ -5,7 +5,7 @@ import useDocumentTitle from "../customHooks/documentTitle";
 export default function Loading(){
   useDocumentTitle("Loading");
     return(
-        <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-800">
+        <div className="flex items-center justify-center  bg-transparent mt-9">
       <div className="flex flex-col items-center space-y-6">
         <span className="text-4xl md:text-7xl font-bold text-blue-600 dark:text-white">
           Loading

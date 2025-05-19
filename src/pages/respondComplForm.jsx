@@ -1,47 +1,53 @@
 import { useState } from "react";
-import useDocumentTitle from "../customHooks/documentTitle";
 
-export default function ResponseForm({ complaintId, responderId }) {
-  useDocumentTitle("Response Form");
+
+export default function ResponseForm({ complaintId }) {
+  
 
   const [message, setMessage] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatusMessage("");
-    setError("");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setStatusMessage("");
+  setError("");
 
-    if (!message.trim()) {
-      setError("Response message is required");
-      return;
+  if (!message.trim()) {
+    setError("Response message is required");
+    return;
+  }
+
+ 
+
+  try {
+   const token = localStorage.getItem("token"); // or wherever you store it
+
+const response = await fetch(
+  "https://citizen-engagement-system-backend.onrender.com/api/response/create",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify({ complaint_id: complaintId, message }),
+  }
+);
+
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || "Failed to send response");
     }
 
-    if (!complaintId || !responderId) {
-      setError("Complaint ID and Responder ID are required");
-      return;
-    }
+    setStatusMessage("Response sent successfully.");
+    setMessage("");
+  } catch (err) {
+    setError(err.message);
+  }
+};
 
-    try {
-      // Replace with your API endpoint and method
-      const response = await fetch("/api/responses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ complaint_id: complaintId, responder_id: responderId, message }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Failed to send response");
-      }
-
-      setStatusMessage("Response sent successfully.");
-      setMessage("");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
 
   return (
     <div className="w-screen bg-white justify-center items-center dark:bg-black h-screen flex">

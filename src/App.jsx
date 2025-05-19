@@ -51,12 +51,12 @@ function App() {
     <Route path="*" element={<NotFound />} />
 
     <Route path="update-pass" element={<UpdatePassword />} />
-    <Route path="view-complaint" element={<ViewComplaint />} />
+    <Route path="view-complaint/:id" element={<ViewComplaint />} />
     <Route path="view-user" element={<ViewUser />} />
     {/* Protected / Citizen Layout Routes */}
    
     <Route path="view-agency" element={<ViewAgency />} />
-    <Route path="update-complaint" element={<UpdateComplaint />} />
+    <Route path="update-complaint/:id" element={<UpdateComplaint />} />
 
     <Route path="/citizen" element={<LayoutCitizen />}>
       <Route path="dashboard" element={<CitizenDashboard />} />
@@ -72,7 +72,7 @@ function App() {
 
       {/* Protected / Admin Layout Routes */}
       <Route path="respond-form" element={<ResponseForm />} />
-      <Route path="change-status" element={<ChangeStatus />} />
+      <Route path="change-status/:id" element={<ChangeStatus />} />
 
       <Route path="/admin" element={<LayoutAdmin />}>
       <Route path="dashboard" element={<AdminDashboard/>} />

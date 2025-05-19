@@ -1,17 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Icon from "../assets/logo.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import useDocumentTitle from "../customHooks/documentTitle";
+import toast from "react-hot-toast";
+
 // Zod schema
 const schema = z
   .object({
     email: z.string().email("Enter a valid email address"),
-    newPassword: z
-      .string()
-      .min(6, "Password must be at least 6 characters"),
+    newPassword: z.string().min(6, "Password must be at least 6 characters"),
     confirm: z.string(),
   })
   .refine((data) => data.newPassword === data.confirm, {
@@ -20,8 +20,10 @@ const schema = z
   });
 
 export default function ResetPassword() {
-  useDocumentTitle("Reset-Password");
+  useDocumentTitle("OpenVoice -Reset-Password");
   const navigate = useNavigate();
+  const { token } = useParams(); // get token from URL params
+
   const {
     register,
     handleSubmit,
@@ -31,10 +33,33 @@ export default function ResetPassword() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log("Reset Data:", data);
-    alert("Your password has been reset!");
-    reset();
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch(`https://citizen-engagement-system-backend.onrender.com/api/user/resetpassword/${token}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: data.email,
+          newPassword: data.newPassword,
+          confirm: data.confirm, 
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast.error(result.message || "Failed to reset password");
+        return;
+      }
+
+      toast.success("Your password has been reset!");
+      reset();
+      setTimeout(() => navigate("/login"), 1500);
+     
+    } catch (error) {
+      console.error("Reset password error:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -43,7 +68,7 @@ export default function ResetPassword() {
         {/* Left Panel */}
         <div className=" w-full flex flex-col  rounded-md p-6 justify-center items-center">
           <div className="mb-6">
-             <img src={Icon} alt="Logo" className="h-12 w-auto" />
+            <img src={Icon} alt="Logo" className="h-12 w-auto" />
           </div>
           <h2 className="text-2xl font-bold text-gray-800">Reset Password</h2>
           <p className="text-sm text-center mt-4 text-gray-600 px-4">
@@ -77,9 +102,7 @@ export default function ResetPassword() {
               placeholder="New Password"
             />
             {errors.newPassword && (
-              <p className="text-red-500 text-sm">
-                {errors.newPassword.message}
-              </p>
+              <p className="text-red-500 text-sm">{errors.newPassword.message}</p>
             )}
 
             <input
@@ -95,7 +118,7 @@ export default function ResetPassword() {
             <button
               type="submit"
               className="mt-2 bg-[#FFB640] text-white p-3 rounded-md hover:bg-[#b37b22] transition duration-200"
-              onClick={() => navigate("/")}
+              // Remove onClick navigate here to allow form submit to trigger navigation
             >
               Reset Password
             </button>

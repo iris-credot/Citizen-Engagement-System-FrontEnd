@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Icon from '../assets/picc.jpg';
+import axios from "axios";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -16,13 +18,30 @@ import {
 export default function SideBarAdmin() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
+  const navigate = useNavigate();
+ const baseLinkClasses = "flex items-center px-4 py-2 rounded-md transition-colors duration-200 bg-black dark:text-white text-black hover:bg-[#FFB640] hover:text-black";
+const activeLinkClasses = "bg-gradient-to-r from-[#FFB640] to-[#FFB640] text-white shadow-md";
+const linkClasses = ({ isActive }) => 
+  isActive ? `${baseLinkClasses} ${activeLinkClasses}` : baseLinkClasses;
 
-  const linkClasses = ({ isActive }) =>
-    `flex items-center px-4 py-2 rounded-md transition-colors duration-200 dark:text-white ${
-      isActive
-        ? 'bg-gradient-to-r from-[#FFB640] to-[#FFB640]  text-white shadow-md'
-        : 'text-black hover:bg-[#FFB640] hover:text-black'
-    }`;
+const logoutButtonClasses = baseLinkClasses + " cursor-pointer w-full text-left";
+const handleLogout = async () => {
+  try {
+   await axios.post(
+  "https://citizen-engagement-system-backend.onrender.com/api/user/logout",
+  {},
+  { withCredentials: true } // ✅ Add this
+);
+    // Clear localStorage tokens after successful logout
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    // Redirect or update UI after logout
+    navigate('/login');
+  } catch (error) {
+    console.error('Logout failed:', error);
+    alert('Failed to logout');
+  }
+};
 
   return (
     <>
@@ -55,9 +74,9 @@ export default function SideBarAdmin() {
           <NavLink to="/admin/settings" className={linkClasses}>
             <FontAwesomeIcon icon={faCog} className="mr-4" /> Settings
           </NavLink>
-          <NavLink to="/" className={linkClasses}>
-          <FontAwesomeIcon icon={faRightFromBracket} className="mr-4" />Logout
-          </NavLink>
+          <button onClick={handleLogout} className={logoutButtonClasses}>
+  <FontAwesomeIcon icon={faRightFromBracket} className="mr-4" /> Logout
+</button>
         </nav>
       </div>
 
@@ -89,9 +108,9 @@ export default function SideBarAdmin() {
           <NavLink to="/admin/settings" className={linkClasses} onClick={toggleSidebar}>
             <FontAwesomeIcon icon={faCog} className="mr-4" /> Settings
           </NavLink>
-          <NavLink to="/" className={linkClasses} onClick={toggleSidebar}>
-          <FontAwesomeIcon icon={faRightFromBracket} className="mr-4" />Logout
-          </NavLink>
+         <button onClick={handleLogout} className={logoutButtonClasses}>
+  <FontAwesomeIcon icon={faRightFromBracket} className="mr-4" /> Logout
+</button>
 
           </nav>
         </div>

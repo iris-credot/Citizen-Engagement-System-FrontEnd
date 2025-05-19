@@ -11,7 +11,7 @@ export default function LayoutCitizen() {
         <SideBarCitizen />
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto bg-white p-4 dark:bg-gray-900">
+        <main className="flex-1 overflow-y-auto bg-white p-4 dark:bg-gray-800">
           <Outlet />
         </main>
       </div>

@@ -1,13 +1,15 @@
-import useDocumentTitle from "../customHooks/documentTitle";
+
+import { useNavigate } from "react-router-dom";
 
 export default function AgencyAdmins() {
-  useDocumentTitle("Agency Admin");
+  const navigate = useNavigate();
+
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 dark:text-white">All Agency Admins</h1>
 
-      <button className="mb-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800">
+      <button className="mb-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800" onClick={() => navigate("/createAdmin")}>
         Create New Admin
       </button>
 

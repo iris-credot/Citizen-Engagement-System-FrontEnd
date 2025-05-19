@@ -1,8 +1,9 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import useDocumentTitle from "../customHooks/documentTitle";
+
+import toast, { Toaster } from "react-hot-toast";
 
 // Zod schema
 const schema = z
@@ -17,7 +18,8 @@ const schema = z
   });
 
 export default function UpdatePassword() {
-  useDocumentTitle("Update Password");
+  const navigate = useNavigate(); 
+ 
 
   const {
     register,
@@ -28,13 +30,47 @@ export default function UpdatePassword() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data) => {
-   alert (data)// TODO: Send password update request to your backend
+ const onSubmit = async (data) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Authentication token not found");
+    }
+
+    const response = await fetch("https://citizen-engagement-system-backend.onrender.com/api/user/password", {
+      method: "PUT",
+      headers: {
+         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+       
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      toast.error(result.error || "Something went wrong");
+      return;
+    }
+
+    toast.success(result.message || "Password updated successfully");
     reset();
-  };
+
+    setTimeout(() => {
+      navigate(-1);
+    }, 1500);
+  } catch (error) {
+    toast.error("An error occurred");
+    console.error("Error:", error);
+  }
+};
+
+  
 
   return (
-    <div className="flex items-center justify-center  w-screen ">
+    <div className="flex items-center justify-center w-screen bg-white dark:bg-slate-950 h-screen">
+      <Toaster />
       <div className="w-full max-w-xl bg-white rounded-xl flex flex-col p-6 gap-6 mt-20 dark:bg-gray-700">
         <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">
           Update Password
