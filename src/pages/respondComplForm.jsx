@@ -52,7 +52,7 @@ const response = await fetch(
   return (
     <div className="w-screen bg-white justify-center items-center dark:bg-black h-screen flex">
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
-      <h2 className="text-2xl font-semibold mb-6">Respond to Complaint</h2>
+      <h2 className="text-2xl font-semibold mb-6">New Complaint Response</h2>
 
       {statusMessage && <p className="text-green-600 mb-4">{statusMessage}</p>}
       {error && <p className="text-red-600 mb-4">{error}</p>}

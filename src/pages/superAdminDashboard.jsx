@@ -64,7 +64,7 @@ export default function SuperAdminDashboard() {
       {/* Dashboard bottom section */}
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Recent Activities */}
-        <section className="bg-gray-800 rounded-lg shadow p-6 max-h-80 overflow-y-auto">
+        <section className="bg-white text-black dark:text-white dark:bg-gray-800 rounded-lg shadow p-6 max-h-80 overflow-y-auto">
           <h3 className="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">
             Recent Activities
           </h3>
@@ -83,8 +83,8 @@ export default function SuperAdminDashboard() {
         </section>
 
         {/* Chart placeholder */}
-        <section className="bg-gray-800 rounded-lg shadow p-6 flex flex-col justify-center items-center">
-          <h3 className="text-2xl font-semibold mb-6">User Growth (Chart Placeholder)</h3>
+        <section className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col justify-center items-center">
+          <h3 className="text-2xl font-semibold mb-6">User Growth </h3>
           <div className="w-full h-48 bg-gray-700 rounded flex justify-center items-center text-gray-400 italic">
             Chart coming soon...
           </div>

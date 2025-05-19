@@ -1,7 +1,39 @@
+import { useEffect, useState } from "react";
 import useDocumentTitle from "../customHooks/documentTitle";
+import axios from "axios";
 
 export default function CitizensPage() {
   useDocumentTitle("All Citizens");
+
+  const [citizens, setCitizens] = useState([]);
+
+  useEffect(() => {
+    const fetchCitizens = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found in localStorage");
+          return;
+        }
+
+        const response = await axios.get(
+          "https://citizen-engagement-system-backend.onrender.com/api/user/getallCitiens",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Fetched citizens:", response.data);
+         setCitizens(response.data.citizens);
+      } catch (error) {
+        console.error("Error fetching citizens:", error);
+      }
+    };
+
+    fetchCitizens();
+  }, []);
+
 
   return (
     <div className="p-6">
@@ -16,42 +48,20 @@ export default function CitizensPage() {
           </tr>
         </thead>
         <tbody>
-          <tr className="hover:bg-gray-50">
-            <td className="border border-gray-300 p-2">Citizen One</td>
-            <td className="border border-gray-300 p-2">citizen1@example.com</td>
-            <td className="border border-gray-300 p-2 text-center space-x-2">
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                View
-              </button>
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr className="hover:bg-gray-50">
-            <td className="border border-gray-300 p-2">Citizen Two</td>
-            <td className="border border-gray-300 p-2">citizen2@example.com</td>
-            <td className="border border-gray-300 p-2 text-center space-x-2">
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                View
-              </button>
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr className="hover:bg-gray-50">
-            <td className="border border-gray-300 p-2">Citizen Three</td>
-            <td className="border border-gray-300 p-2">citizen3@example.com</td>
-            <td className="border border-gray-300 p-2 text-center space-x-2">
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                View
-              </button>
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                Delete
-              </button>
-            </td>
-          </tr>
+          {citizens.map((citizen, index) => (
+            <tr key={index} className="hover:bg-gray-50">
+              <td className="border border-gray-300 p-2">{citizen.names}</td>
+              <td className="border border-gray-300 p-2">{citizen.email}</td>
+              <td className="border border-gray-300 p-2 text-center space-x-2">
+                <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
+                  View
+                </button>
+                <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

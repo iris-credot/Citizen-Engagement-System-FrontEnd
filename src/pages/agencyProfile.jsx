@@ -1,8 +1,9 @@
-import { useState} from "react";
+import { useEffect,useState} from "react";
 import useDocumentTitle from "../customHooks/documentTitle";
 
 export default function AgencyProfile() {
   useDocumentTitle("Agency Profile");
+
 
   // Dummy default values (replace with API call later)
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export default function AgencyProfile() {
     contact_email: "info@health.gov.rw",
   });
 
+  const [agencyId, setAgencyId] = useState(null);
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
@@ -22,13 +24,65 @@ export default function AgencyProfile() {
     }));
   };
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user?.role === "agency") {
+      // Agency already available
+      if (user?.agency) {
+        setAgencyId(user.agency?._id || user.agency);
+      } else {
+        // Fetch agency by user ID
+        fetch(`https://citizen-engagement-system-backend.onrender.com/api/agency/by-user/${user._id}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.agency?._id) {
+              const updatedUser = { ...user, agency: data.agency._id };
+              localStorage.setItem("user", JSON.stringify(updatedUser));
+              setAgencyId(data.agency._id);
+            }
+          })
+          .catch(err => {
+            console.error("Failed to fetch agency info:", err);
+          });
+      }
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Later: replace with PUT / PATCH request to your API
-    console.log("Submitting updated agency:", formData);
-    setMessage("Agency profile updated successfully.");
+    if (!agencyId) {
+      setMessage("No agency associated with this user.");
+      console.error("No agency ID found in user object.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://citizen-engagement-system-backend.onrender.com/api/agency/update/${agencyId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update agency");
+      }
+
+      setMessage("Agency profile updated successfully.");
+    } catch (error) {
+      console.error("Error updating agency:", error);
+      setMessage(`Error updating agency: ${error.message}`);
+    }
   };
+
+
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white dark:bg-black  rounded-lg shadow-md">

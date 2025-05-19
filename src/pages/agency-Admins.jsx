@@ -1,15 +1,47 @@
-
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function AgencyAdmins() {
   const navigate = useNavigate();
+  const [admins, setAdmins] = useState([]);
 
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found in localStorage");
+          return;
+        }
+
+        const response = await axios.get(
+          "https://citizen-engagement-system-backend.onrender.com/api/user/getallAdmins",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Fetched admins:", response.data);
+       setAdmins(response.data.admins || response.data.citizens || []);
+// Assuming response.data.admins is the array
+      } catch (error) {
+        console.error("Error fetching admins:", error);
+      }
+    };
+
+    fetchAdmins();
+  }, []);
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 dark:text-white">All Agency Admins</h1>
 
-      <button className="mb-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800" onClick={() => navigate("/createAdmin")}>
+      <button
+        className="mb-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
+        onClick={() => navigate("/createAdmin")}
+      >
         Create New Admin
       </button>
 
@@ -22,30 +54,20 @@ export default function AgencyAdmins() {
           </tr>
         </thead>
         <tbody>
-          <tr className="hover:bg-gray-50">
-            <td className="border border-gray-300 p-2">Jane Doe</td>
-            <td className="border border-gray-300 p-2">jane@example.com</td>
-            <td className="border border-gray-300 p-2 text-center space-x-2">
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                View
-              </button>
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr className="hover:bg-gray-50">
-            <td className="border border-gray-300 p-2">John Smith</td>
-            <td className="border border-gray-300 p-2">john@example.com</td>
-            <td className="border border-gray-300 p-2 text-center space-x-2">
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                View
-              </button>
-              <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
-                Delete
-              </button>
-            </td>
-          </tr>
+          {admins.map((admin) => (
+            <tr key={admin._id} className="hover:bg-gray-50">
+              <td className="border border-gray-300 p-2">{admin.names}</td>
+              <td className="border border-gray-300 p-2">{admin.email}</td>
+              <td className="border border-gray-300 p-2 text-center space-x-2">
+                <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
+                  View
+                </button>
+                <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

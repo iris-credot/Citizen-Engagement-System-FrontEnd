@@ -19,12 +19,13 @@ export default function SideBarCitizen() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
- const baseLinkClasses = "flex items-center px-4 py-2 rounded-md transition-colors duration-200 bg-black dark:text-white text-black hover:bg-[#FFB640] hover:text-black";
+ const baseLinkClasses = "flex items-center px-4 py-2 rounded-md transition-colors duration-200 dark:text-white text-black hover:bg-[#FFB640] hover:text-black";
+ const baseLinkClass= "flex items-center px-4 py-2 rounded-md transition-colors duration-200 dark:bg-black dark:text-white text-black hover:bg-[#FFB640] hover:text-black";
 const activeLinkClasses = "bg-gradient-to-r from-[#FFB640] to-[#FFB640] text-white shadow-md";
 const linkClasses = ({ isActive }) => 
   isActive ? `${baseLinkClasses} ${activeLinkClasses}` : baseLinkClasses;
 
-const logoutButtonClasses = baseLinkClasses + " cursor-pointer w-full text-left";
+const logoutButtonClasses = baseLinkClass + " cursor-pointer w-full text-left";
 const handleLogout = async () => {
   try {
    await axios.post(

@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import useDocumentTitle from "../customHooks/documentTitle";
 import {  useNavigate } from "react-router-dom";
+import Loading from "./loadingPage";
 
 const complaintSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -141,11 +142,7 @@ export default function UpdateComplaint() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Loading complaint data...</p>
-      </div>
-    );
+   <Loading/>
   }
 
   if (fetchError) {

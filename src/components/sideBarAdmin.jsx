@@ -19,12 +19,13 @@ export default function SideBarAdmin() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
- const baseLinkClasses = "flex items-center px-4 py-2 rounded-md transition-colors duration-200 bg-black dark:text-white text-black hover:bg-[#FFB640] hover:text-black";
+ const baseLinkClasses = "flex items-center px-4 py-2 rounded-md transition-colors duration-200  dark:text-white text-black hover:bg-[#FFB640] hover:text-black";
+ const baseLinkClass = "flex items-center px-4 py-2 rounded-md transition-colors duration-200  dark:bg-black dark:text-white text-black hover:bg-[#FFB640] hover:text-black";
 const activeLinkClasses = "bg-gradient-to-r from-[#FFB640] to-[#FFB640] text-white shadow-md";
 const linkClasses = ({ isActive }) => 
   isActive ? `${baseLinkClasses} ${activeLinkClasses}` : baseLinkClasses;
 
-const logoutButtonClasses = baseLinkClasses + " cursor-pointer w-full text-left";
+const logoutButtonClasses = baseLinkClass + " cursor-pointer w-full text-left";
 const handleLogout = async () => {
   try {
    await axios.post(
@@ -62,10 +63,10 @@ const handleLogout = async () => {
           <NavLink to="/admin/dashboard" className={linkClasses}>
             <FontAwesomeIcon icon={faHome} className="mr-4" /> Home
           </NavLink>
-          <NavLink to="/admin/complaints" className={linkClasses}>
+          <NavLink to="/admin/complaints/:agencyId" className={linkClasses}>
             <FontAwesomeIcon icon={faCalendarCheck} className="mr-4" /> Complaints
           </NavLink>
-          <NavLink to="/admin/profile" className={linkClasses}>
+          <NavLink to="/admin/profile/:id" className={linkClasses}>
             <FontAwesomeIcon icon={faUserInjured} className="mr-4" /> Agency Profile
           </NavLink>
           <NavLink to="/admin/notifications" className={linkClasses}>
@@ -96,10 +97,10 @@ const handleLogout = async () => {
           <NavLink to="/admin/dashboard" className={linkClasses} onClick={toggleSidebar}>
             <FontAwesomeIcon icon={faHome} className="mr-4" /> Home
           </NavLink>
-          <NavLink to="/admin/complaints" className={linkClasses} onClick={toggleSidebar}>
+          <NavLink to="/admin/complaints/:agencyId" className={linkClasses} onClick={toggleSidebar}>
             <FontAwesomeIcon icon={faCalendarCheck} className="mr-4" /> Complaints
           </NavLink>
-          <NavLink to="/admin/profile" className={linkClasses} onClick={toggleSidebar}>
+          <NavLink to="/admin/profile/:id" className={linkClasses} onClick={toggleSidebar}>
             <FontAwesomeIcon icon={faUserInjured} className="mr-4" /> Agency Profile
           </NavLink>
           <NavLink to="/admin/notifications" className={linkClasses} onClick={toggleSidebar}>

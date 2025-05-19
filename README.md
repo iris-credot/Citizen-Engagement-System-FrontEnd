@@ -1,12 +1,72 @@
-# React + Vite
+# 🏛️ Citizen Engagement System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web platform to bridge the gap between citizens and government agencies. It allows citizens to raise complaints, track resolutions, and receive timely responses while admins and superadmins manage workflows efficiently.
 
-Currently, two official plugins are available:
+![Slight Peek](/src/assets/home.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔐 Role-based Authentication (Citizen, Admin, Superadmin)
+- 📝 Complaint Submission & Status Tracking
+- 📬 Admin Responses with Notifications
+- 📊 Admin Dashboard with Analytics (citizen counts, complaints, agencies)
+- 🧭 Agency Management (create, update, delete)
+- 📅 Recent Activity Feed
+- 🌓 Dark Mode Support (UI)
+- 📧 Email Notifications & OTP Verification
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 👥 User Roles
+
+### 👤 Citizen
+- Register, login, and submit complaints
+- View status, receive responses
+- Update profile
+- View Notifications
+
+### 🛠️ Admin
+- View and respond to complaints
+- Track complaint statistics
+- Manage agency staff under their control
+
+### 👑 Superadmin
+- Full access to system
+- Manage admins, agencies, users, and settings
+
+## 🛠 Tech Stack
+
+- **React.js** - For markup structure  
+- **Tailwind CSS** - Utility-first CSS framework for styling  
+- **Vite** - Buid Tools & Performance Improvement
+- **React Router Dom** - Mobile-first approach  
+- **Responsive** - Accessed by all types of devices 
+- **Axios, Github** - For backend connection 
+
+
+## 🚀 Deployed Website
+
+
+ [Link] (https://citizen-engagement-system-frontend.onrender.com)
+
+## ⚙️ Installation
+
+1. **Clone the repo**
+
+```bash
+git https://github.com/iris-credot/Citizen-Engagement-System-FrontEnd.git
+cd Citizen-Engagement-System
+cd ../frontend && npm install
+cd ../frontend && npm run dev
+
+🤝 Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you’d like to change.
+
+📄 License
+This project is licensed under the MIT License.
+
+## 👨‍💻 Author
+
+Developed by Iris Credot  
+📧 tetairiscredot@gmail.com  
+
+✅  Next Step:  
+Save this as `README.md` in the root of your backend project.

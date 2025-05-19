@@ -1,98 +1,83 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDocumentTitle from "../customHooks/documentTitle";
+import axios from "axios";
 
-export default function AllAgencies() {
-  useDocumentTitle("Agencies Page");
+export default function AgenciesPage() {
+  useDocumentTitle("Agencies");
 
-  // Static dummy data, replace with your API data fetching logic
-  const [agencies, setAgencies] = useState([
-    { _id: "1", name: "Agency One", description: "Description one" },
-    { _id: "2", name: "Agency Two", description: "Description two" },
-    { _id: "3", name: "Agency Three", description: "Description three" },
-  ]);
+  const [agencies, setAgencies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const handleAddAgency = () => {
-    // Navigate to add agency page or open modal
-    alert("Navigate to Add Agency form");
-  };
+useEffect(() => {
+  const fetchAgencies = async () => {
+    try {
+      const token = localStorage.getItem("token"); // make sure this matches your auth storage
 
-  const handleEditAgency = (id) => {
-    // Navigate to edit agency page or open modal with agency id
-    alert(`Edit agency ${id}`);
-  };
+      const response = await axios.get(
+        "https://citizen-engagement-system-backend.onrender.com/api/agency/getall",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  const handleDeleteAgency = (id) => {
-    // Confirm delete, then call delete API and update state
-    if (window.confirm("Are you sure you want to delete this agency?")) {
-      setAgencies((prev) => prev.filter((agency) => agency._id !== id));
-      alert(`Agency ${id} deleted`);
+      console.log("Fetched agencies:", response.data);
+      setAgencies(response.data.agencies || []);
+    } catch (err) {
+      console.error("Error fetching agencies:", err);
+      setError("Failed to load agencies.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleViewAgency = (id) => {
-    // Navigate to view agency details page
-    alert(`View agency ${id}`);
-  };
+  fetchAgencies();
+}, []);
 
   return (
-    <div className="min-h-screen  bg-white dark:bg-black p-6 text-black  flex justify-center items-start pt-12">
-    <div className="w-full mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">All Agencies</h1>
-        <button
-          onClick={handleAddAgency}
-          className="bg-[#FFB640] text-white px-4 py-2 rounded-md hover:bg-[#e6a72a]"
-        >
-          Add New Agency
-        </button>
-      </div>
+    <div className="p-6 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+        Explore Government Agencies
+      </h1>
 
-      <table className="w-full border border-gray-300 rounded-md">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
-            <th className="border border-gray-300 px-4 py-2 text-left">Description</th>
-            <th className="border border-gray-300 px-4 py-2 text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {agencies.length === 0 && (
-            <tr>
-              <td colSpan="3" className="text-center py-4 text-gray-500">
-                No agencies found.
-              </td>
-            </tr>
-          )}
+      {loading && (
+        <p className="text-center text-gray-700 dark:text-gray-300">Loading...</p>
+      )}
+      {error && (
+        <p className="text-center text-red-600 dark:text-red-400">{error}</p>
+      )}
 
+      {!loading && !error && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {agencies.map((agency) => (
-            <tr key={agency._id} className="hover:bg-gray-50">
-              <td className="border border-gray-300 px-4 py-2">{agency.name}</td>
-              <td className="border border-gray-300 px-4 py-2">{agency.description}</td>
-              <td className="border border-gray-300 px-4 py-2 text-center space-x-2">
-                <button
-                  onClick={() => handleViewAgency(agency._id)}
-                  className="text-blue-600 hover:underline"
+            <div
+              key={agency._id}
+              className="bg-white dark:bg-gray-900 shadow-md hover:shadow-lg transition-shadow rounded-2xl p-5 border border-gray-200 dark:border-gray-700"
+            >
+              <h2 className="text-xl font-semibold text-black dark:text-white mb-2">
+                {agency.name}
+              </h2>
+              <p className="text-gray-700 dark:text-gray-300 mb-2">
+                {agency.description}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                📍 <strong>Location:</strong> {agency.location}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                ✉️ <strong>Email:</strong>{" "}
+                <a
+                  href={`mailto:${agency.contact_email}`}
+                  className="text-[#FFB640] font-medium hover:underline"
                 >
-                  View
-                </button>
-                <button
-                  onClick={() => handleEditAgency(agency._id)}
-                  className="text-yellow-600 hover:underline"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteAgency(agency._id)}
-                  className="text-red-600 hover:underline"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
+                  {agency.contact_email}
+                </a>
+              </p>
+            </div>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </div>
+      )}
     </div>
   );
 }

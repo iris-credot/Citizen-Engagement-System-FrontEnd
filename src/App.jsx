@@ -76,8 +76,8 @@ function App() {
 
       <Route path="/admin" element={<LayoutAdmin />}>
       <Route path="dashboard" element={<AdminDashboard/>} />
-      <Route path="complaints" element={<ComplaintsAdmin/>} />
-      <Route path="profile" element={<AgencyProfile/>} />
+      <Route path="complaints/:agencyId" element={<ComplaintsAdmin/>} />
+      <Route path="profile/:id" element={<AgencyProfile/>} />
       <Route path="notifications" element={<NotificationsPage />} />
       <Route path="settings" element={<SettingsPage />}/>
 
