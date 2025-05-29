@@ -86,7 +86,7 @@ export default function NotificationsPage() {
               >
                 <div className="w-[80%]">
                   <h2 className="font-semibold">{notification.title}</h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{notification.time}</p>
+                  <p className="text-sm text-gray-500 dark:text-white">{notification.time}</p>
                 </div>
                 <div className="flex gap-3 w-[20%]">
                   <button className="text-xs bg-black text-white dark:text-black dark:bg-white px-2 py-1 mt-3">

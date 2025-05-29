@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import useDocumentTitle from "../customHooks/documentTitle";
 
 export default function ComplaintsAdmin() {
   useDocumentTitle("All Complaints");
-
+ const navigate = useNavigate();
   const { agencyId } = useParams();
 
   const [complaints, setComplaints] = useState([]);
@@ -26,7 +26,7 @@ export default function ComplaintsAdmin() {
          
         if (!token) throw new Error("Not authenticated");
         const response = await fetch(
-          `https://citizen-engagement-system-backend.onrender.com/api/complaint/getOne/${agencyId}`,
+          `https://citizen-engagement-system-backend.onrender.com/api/complaint/getOneAgency/${agencyId}`,
             {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -88,6 +88,12 @@ export default function ComplaintsAdmin() {
                 </p>
               </div>
               <div className="flex gap-2">
+                  <button
+            className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800"
+            onClick={() => navigate(`/view-complaint/${complaint._id}`)}
+          >
+            View
+          </button>
                 <button className="text-blue-500 hover:text-blue-700">
                   <Pencil size={20} />
                 </button>

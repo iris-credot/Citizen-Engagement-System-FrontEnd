@@ -23,14 +23,14 @@ export default function ViewComplaint() {
         }
     
         const response = await axios.get(
-          `https://citizen-engagement-system-backend.onrender.com/api/complaint/getOne/${id}`,
+          `https://citizen-engagement-system-backend.onrender.com/api/complaint/getOneComplaint/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-    
+      console.log("API Response:", response.data);
         setComplaint(response.data.complaint);
       } catch (err) {
         console.error("Error fetching complaint:", err);
@@ -61,7 +61,7 @@ export default function ViewComplaint() {
          {loading && <div className="w-screen"><Loading/></div> }
          {error && <p className="min-h-screen w-screen flex justify-center items-center bg-white dark:bg-black text-red-600 dark:text-white">{error}</p>}
 
-{!loading && !error && (
+{!loading && !error && complaint && (
    
       <div className="max-w-3xl mx-auto bg-white dark:bg-[#1e1e1e] rounded-xl shadow-md p-6 mt-6 text-white border border-gray-200 dark:border-gray-700">
         
@@ -70,7 +70,7 @@ export default function ViewComplaint() {
 
         <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
           <p><strong>Category:</strong> {complaint.category}</p>
-          <p><strong>Agency:</strong> {complaint.agency?.name || "N/A"}</p>
+          <p><strong>Agency:</strong> {complaint.agency_id?.name || "N/A"}</p>
           <p><strong>Status:</strong> 
             <span className="ml-2 px-2 py-1 bg-[#FFB640] text-white rounded-full text-xs">
               {complaint.status}
