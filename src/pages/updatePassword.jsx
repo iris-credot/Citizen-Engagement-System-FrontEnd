@@ -69,7 +69,7 @@ export default function UpdatePassword() {
   
 
   return (
-    <div className="flex items-center justify-center w-screen bg-white dark:bg-slate-950 h-screen">
+    <div className="flex items-center justify-center  bg-white dark:bg-slate-950 ">
       <Toaster />
       <div className="w-full max-w-xl bg-white rounded-xl flex flex-col p-6 gap-6 mt-20 dark:bg-gray-700">
         <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">

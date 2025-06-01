@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
@@ -36,8 +37,11 @@ export default function NotificationsPage() {
           }
         );
 
-        const fetchedNotifications = res.data.notifications || [];
+        const fetchedNotifications = (res.data.notifications || []).sort(
+  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+);
         setNotifications(fetchedNotifications);
+        console.log(fetchNotifications);
         setHasNoNotifications(fetchedNotifications.length === 0);
       } catch (err) {
         if (err.response?.status === 404) {
@@ -67,6 +71,47 @@ export default function NotificationsPage() {
   const handlePrevious = () => {
     if (currentPage > 1) setCurrentPage(prev => prev - 1);
   };
+const handleDelete = async (id) => {
+  const confirmDelete = window.confirm("Are you sure you want to delete this notification?");
+  if (!confirmDelete) return;
+
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("Authentication token not found");
+
+    const response = await fetch(
+      `https://citizen-engagement-system-backend.onrender.com/api/notify/delete/${id}`, // FIXED URL
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const contentType = response.headers.get("content-type");
+
+    if (!response.ok) {
+      let errorMsg = "Failed to delete notification.";
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        errorMsg = data.message || errorMsg;
+      }
+      throw new Error(errorMsg);
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    // Remove the deleted notification from UI
+    setNotifications((prev) => prev.filter((n) => n._id !== id));
+    toast.success(data.message || "Notification deleted successfully.");
+  } catch (err) {
+    toast.error(err.message || "An error occurred during deletion.");
+  }
+};
+
 
   return (
     <div className="flex flex-col dark:text-white p-6">
@@ -84,18 +129,19 @@ export default function NotificationsPage() {
                 key={notification._id}
                 className="flex gap-2 border border-gray-300 dark:border-gray-600 rounded-lg p-4 shadow hover:shadow-md transition"
               >
-                <div className="w-[80%]">
-                  <h2 className="font-semibold">{notification.title}</h2>
-                  <p className="text-sm text-gray-500 dark:text-white">{notification.time}</p>
+                <div className="w-[90%]">
+                  <h2 className="font-semibold">{notification.message}</h2>
+<p className="text-sm text-gray-500 dark:text-white">
+  {new Date(notification.createdAt).toLocaleString()}
+</p>
+                  
                 </div>
-                <div className="flex gap-3 w-[20%]">
-                  <button className="text-xs bg-black text-white dark:text-black dark:bg-white px-2 py-1 mt-3">
-                    Mark read
-                  </button>
-                  <span className="text-red-700 text-2xl mt-3">
-                    <i className="fas fa-trash" onClick={() => {}}></i>
+              
+
+                  <span className="text-red-700 text-2xl ">
+                    <i className="fas fa-trash"  onClick={() => handleDelete(notification._id)}></i>
                   </span>
-                </div>
+             
               </div>
             ))}
           </div>

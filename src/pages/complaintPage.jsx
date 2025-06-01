@@ -70,7 +70,7 @@ export default function ComplaintsPage() {
       const data = await response.json();
 
       if (!response.ok) throw new Error(data.message || "Failed to delete complaint.");
-
+console.log(data);
       // Remove the deleted complaint from UI
       setComplaints((prev) => prev.filter((comp) => comp._id !== id));
 
@@ -101,7 +101,7 @@ export default function ComplaintsPage() {
                 <div>
                   <h3 className="text-xl font-bold">{complaint.title}</h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Category: {complaint.category} | Agency: {complaint.agency}
+                    Category: {complaint.category} | Agency: {complaint.agency_id.name }
                   </p>
                 </div>
                 <div className="flex gap-2">

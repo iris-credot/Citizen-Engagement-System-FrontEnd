@@ -1,259 +1,134 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import useDocumentTitle from "../customHooks/documentTitle";
-import {  useNavigate } from "react-router-dom";
-import Loading from "./loadingPage";
-
-const complaintSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  category: z.string().min(1, "Please select a category"),
-  agency_id: z.string().min(1, "Please select an agency"),
-});
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function UpdateComplaint() {
-  useDocumentTitle("Update Complaint");
-
-   // complaint id from URL param
-   const { id } = useParams();
+  const { id } = useParams(); // complaint ID from route param
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isSubmitting },
-     reset,
-  } = useForm({
-    resolver: zodResolver(complaintSchema),
+  const [complaint, setComplaint] = useState({
+    title: "",
+    description: "",
   });
 
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState("");
+  const [error, setError] = useState("");
 
-  const [categories, setCategories] = useState([]);
-  const [agencies, setAgencies] = useState([]);
-
-  useEffect(() => {
-    const fetchMeta = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) throw new Error("Not authenticated");
-
-        const [categoriesRes, agenciesRes] = await Promise.all([
-          fetch("https://citizen-engagement-system-backend.onrender.com/api/complaint/getCategories", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch("https://citizen-engagement-system-backend.onrender.com/api/agency/getall", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-
-        if (!categoriesRes.ok) throw new Error("Failed to fetch categories");
-        if (!agenciesRes.ok) throw new Error("Failed to fetch agencies");
-
-        const categoriesData = await categoriesRes.json();
-        const agenciesData = await agenciesRes.json();
-
-        // Assuming categoriesData.categories or just categoriesData array
-        setCategories(categoriesData.categories || categoriesData || []);
-        setAgencies(agenciesData.agencies || agenciesData || []);
-      } catch (err) {
-        setFetchError(err.message || "Failed to load metadata");
-      }
-    };
-
-    fetchMeta();
-  }, []);
-
-  // Fix: Use proper GET complaint URL (likely /api/complaint/:id)
   useEffect(() => {
     const fetchComplaint = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("Not authenticated");
+        return;
+      }
       try {
-        const token = localStorage.getItem("token");
-         
-        if (!token) throw new Error("Not authenticated");
-
-        const res = await fetch(
-          `https://citizen-engagement-system-backend.onrender.com/api/complaint/getOne/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const res = await axios.get(
+          `https://citizen-engagement-system-backend.onrender.com/api/complaint/getOneComplaint/${id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
+        const data = res.data.complaint || res.data;
+        console.log("Fetched complaint data:", res.data);
 
-        if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.message || "Failed to fetch complaint");
-        }
-
-        const data = await res.json();
-        const complaint = data.complaint || data; // depends on backend
-
-        // Populate form fields:
-        setValue("title", complaint.title);
-        setValue("description", complaint.description);
-        setValue("category", complaint.category); // note: 'category' string, not 'category_id'
-        setValue("agency_id", complaint.agency_id); // id
+        setComplaint({
+          title: data.title || "",
+          description: data.description || "",
+        });
       } catch (err) {
-        setFetchError(err.message || "Error loading complaint");
-      } finally {
-        setLoading(false);
+        setError(
+          err.response?.data?.message ||
+            err.message ||
+            "Failed to fetch complaint data"
+        );
       }
     };
 
     fetchComplaint();
-  }, [id, setValue]);
+  }, [id]);
 
-  const onSubmit = async (formData) => {
+  const handleChange = (e) => {
+    setComplaint({ ...complaint, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Not authenticated");
+      return;
+    }
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Not authenticated");
-
-      const res = await fetch(
+      await axios.put(
         `https://citizen-engagement-system-backend.onrender.com/api/complaint/update/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
+        complaint,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || "Failed to update complaint");
-      }
-
       alert("Complaint updated successfully!");
-       reset();
-      setTimeout(() => {
-        navigate(-1); // go back to the previous page
-      }, 1500); 
+      navigate(-1); // or wherever you want to redirect after update
     } catch (err) {
-      alert(`Update failed: ${err.message}`);
+      setError(
+        err.response?.data?.message || err.message || "Failed to update complaint"
+      );
     }
   };
 
-  if (loading) {
-   <Loading/>
-  }
+return (
+  <div className="min-h-screen flex items-center w-screen justify-center bg-gray-100 dark:bg-gray-900 p-4">
+    <div className="w-full max-w-3xl p-8 bg-gray-100 dark:bg-gray-900 dark:text-white rounded-lg shadow-lg flex flex-col space-y-6">
+      <h1 className="text-4xl font-extrabold text-center mb-4">Update Complaint</h1>
 
-  if (fetchError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Error: {fetchError}</p>
-      </div>
-    );
-  }
+      {error && (
+        <div className="bg-red-100 dark:bg-red-700 text-red-700 dark:text-red-200 px-4 py-2 rounded-md font-semibold shadow">
+          {error}
+        </div>
+      )}
 
-  return (
-    <div className="min-h-screen w-screen bg-white dark:bg-black p-6 text-black dark:text-white flex justify-center items-start pt-12">
-      <div className="w-full max-w-2xl bg-white dark:bg-[#1e1e1e] rounded-xl shadow-md p-8 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Update Complaint</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label
+            htmlFor="title"
+            className="block mb-2 font-semibold text-lg"
+          >
+            Title
+          </label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            value={complaint.title}
+            onChange={handleChange}
+            className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+            required
+          />
+        </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div>
-            <label
-              htmlFor="title"
-              className="block mb-1 font-medium text-gray-700 dark:text-gray-300"
-            >
-              Title
-            </label>
-            <input
-              id="title"
-              type="text"
-              {...register("title")}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB640] dark:bg-[#1e1e1e] dark:text-white"
-              placeholder="Enter complaint title"
-            />
-            {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-            )}
-          </div>
+        <div>
+          <label
+            htmlFor="description"
+            className="block mb-2 font-semibold text-lg"
+          >
+            Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            rows={6}
+            value={complaint.description}
+            onChange={handleChange}
+            className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+            required
+          />
+        </div>
 
-          <div>
-            <label
-              htmlFor="description"
-              className="block mb-1 font-medium text-gray-700 dark:text-gray-300"
-            >
-              Description
-            </label>
-            <textarea
-              id="description"
-              {...register("description")}
-              rows={4}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB640] dark:bg-[#1e1e1e] dark:text-white"
-              placeholder="Describe your issue"
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="category"
-              className="block mb-1 font-medium text-gray-700 dark:text-gray-300"
-            >
-              Category
-            </label>
-            <select
-              id="category"
-              {...register("category")}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB640] dark:bg-[#1e1e1e] dark:text-white"
-            >
-              <option value="">-- Select category --</option>
-              {categories.map((cat, idx) => (
-                <option key={idx} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            {errors.category && (
-              <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="agency_id"
-              className="block mb-1 font-medium text-gray-700 dark:text-gray-300"
-            >
-              Agency
-            </label>
-            <select
-              id="agency_id"
-              {...register("agency_id")}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB640] dark:bg-[#1e1e1e] dark:text-white"
-            >
-              <option value="">-- Select agency --</option>
-              {agencies.map((agency) => (
-                <option key={agency._id} value={agency._id}>
-                  {agency.name}
-                </option>
-              ))}
-            </select>
-            {errors.agency_id && (
-              <p className="text-red-500 text-sm mt-1">{errors.agency_id.message}</p>
-            )}
-          </div>
-
+        <div className="flex justify-end">
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2 px-4 bg-[#FFB640] text-white rounded-md hover:bg-[#94661c] transition duration-200 disabled:opacity-50"
+            className="bg-green-600 hover:bg-green-700 transition-colors text-white font-semibold px-8 py-3 rounded-md shadow-md"
           >
-            {isSubmitting ? "Updating..." : "Update Complaint"}
+            Update Complaint
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
-  );
+  </div>
+);
+
 }

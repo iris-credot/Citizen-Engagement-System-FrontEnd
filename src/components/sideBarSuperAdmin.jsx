@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import Icon from '../assets/picc.jpg';
@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function SideBarSuperAdmin() {
+   const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
@@ -43,7 +44,38 @@ const handleLogout = async () => {
     alert('Failed to logout');
   }
 };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("token");
 
+        console.log("Fetching user with ID:", userId);
+        console.log("Using token:", token);
+
+        if (!userId || !token) {
+          console.warn("Missing userId or token in localStorage");
+          return;
+        }
+
+        const response = await axios.get(
+          `https://citizen-engagement-system-backend.onrender.com/api/user/getOne/${userId}`, 
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        console.log("User data fetched successfully:", response.data.user);
+        setUser(response.data.user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <>
@@ -57,8 +89,12 @@ const handleLogout = async () => {
       {/* Desktop Sidebar */}
       <div className="hidden md:flex w-[300px] lg:w-[20%] h-full flex-col bg-gray-100 shadow-sm dark:bg-black dark:text-white">
         <div className="flex items-center gap-5 ml-6 mt-7">
-          <img src={Icon} alt="Logo" className="w-14 h-14 object-cover rounded-full" />
-          <p><strong>User IRIS</strong></p>
+        <img
+          src={user?.image || Icon}
+          alt="User Profile"
+          className="w-14 h-14 object-fill rounded-full"
+        />
+               <p><strong>{user ? `${user.names}` : "Loading..."}</strong></p>
         </div>
         <nav className="flex flex-col mt-16 space-y-4 ml-6">
           <NavLink to="/superAdmin/dashboard" className={linkClasses}>
@@ -93,8 +129,12 @@ const handleLogout = async () => {
         <div className="fixed top-0 left-0 w-64 h-full bg-gray-100 shadow-lg z-50 p-4 flex flex-col md:hidden dark:bg-black dark:text-white">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-3">
-              <img src={Icon} alt="Logo" className="w-10 h-10 object-cover rounded-full" />
-              <p><strong>User IRIS</strong></p>
+        <img
+          src={user?.image || Icon}
+          alt="User Profile"
+          className="w-14 h-14 object-fill rounded-full"
+        />
+               <p><strong>{user ? `${user.names}` : "Loading..."}</strong></p>
             </div>
             <button onClick={toggleSidebar}>
               <FontAwesomeIcon icon={faTimes} className="text-2xl dark:text-black" />

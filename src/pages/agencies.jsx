@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
 export default function AgenciesPage() {
-  const navigate = useNavigate();
+
   
   const [agencies, setAgencies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,12 +41,7 @@ useEffect(() => {
       <h1 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
         Explore Government Agencies
       </h1>
-       <button
-        className="mb-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
-        onClick={() => navigate("/createAdmin")}
-      >
-        Create New Agency
-      </button>
+
       {loading && (
         <p className="text-center text-gray-700 dark:text-gray-300">Loading...</p>
       )}
