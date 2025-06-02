@@ -35,6 +35,7 @@ import AllComplaints from './pages/allComplaints';
 import CitizensPage from './pages/citizensPage';
 import AgencyAdmins from './pages/agency-Admins';
 import AllAgencies from './pages/agenciesPage';
+import NotificationAgency from './pages/notificationAgency';
 function App() {
   
 
@@ -78,7 +79,7 @@ function App() {
       <Route path="dashboard" element={<AdminDashboard/>} />
       <Route path="complaints/:agencyId" element={<ComplaintsAdmin/>} />
       <Route path="profile/:id" element={<AgencyProfile/>} />
-      <Route path="notifications" element={<NotificationsPage />} />
+      <Route path="notifications" element={<NotificationAgency />} />
       <Route path="settings" element={<SettingsPage />}/>
 
       

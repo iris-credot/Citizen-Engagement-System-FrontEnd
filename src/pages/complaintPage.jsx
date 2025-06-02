@@ -11,7 +11,10 @@ export default function ComplaintsPage() {
 
   useEffect(() => {
     const fetchComplaints = async () => {
-      const id = localStorage.getItem("userId");
+     const storedUser = localStorage.getItem("user");
+    console.log(storedUser);
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    const id = parsedUser?.agency_id;
       const token = localStorage.getItem("token");
 
       if (!token || !id) {
@@ -22,7 +25,7 @@ export default function ComplaintsPage() {
 
       try {
         const response = await fetch(
-          `https://citizen-engagement-system-backend.onrender.com/api/complaint/getOne/${id}`,
+          `https://citizen-engagement-system-backend.onrender.com/api/complaint/getOneAgency/${id}`,
           {
             method: "GET",
             headers: {
