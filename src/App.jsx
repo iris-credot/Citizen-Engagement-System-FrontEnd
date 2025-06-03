@@ -96,6 +96,7 @@ function App() {
       <Route path="agencies" element={<AllAgencies />} />
       <Route path="allComplaints" element={<AllComplaints />} />
       <Route path="citizens" element={<CitizensPage />} />
+      <Route path="citizens/view-user/:id" element={<ViewUser />} />
       <Route path="agency-admins" element={<AgencyAdmins />} />
      
     </Route>
