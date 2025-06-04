@@ -36,6 +36,7 @@ import CitizensPage from './pages/citizensPage';
 import AgencyAdmins from './pages/agency-Admins';
 import AllAgencies from './pages/agenciesPage';
 import NotificationAgency from './pages/notificationAgency';
+
 function App() {
   
 
@@ -53,10 +54,10 @@ function App() {
 
     <Route path="update-pass" element={<UpdatePassword />} />
     <Route path="view-complaint/:id" element={<ViewComplaint />} />
-    <Route path="view-user" element={<ViewUser />} />
+
     {/* Protected / Citizen Layout Routes */}
    
-    <Route path="view-agency" element={<ViewAgency />} />
+
     <Route path="update-complaint/:id" element={<UpdateComplaint />} />
 
     <Route path="/citizen" element={<LayoutCitizen />}>
@@ -98,7 +99,7 @@ function App() {
       <Route path="citizens" element={<CitizensPage />} />
       <Route path="citizens/view-user/:id" element={<ViewUser />} />
       <Route path="agency-admins" element={<AgencyAdmins />} />
-     
+      <Route path="agency-admins/view-agency/:id" element={<ViewAgency />} />     
     </Route>
   </Routes>
   )

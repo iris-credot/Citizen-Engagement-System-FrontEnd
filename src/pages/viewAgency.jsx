@@ -23,14 +23,14 @@ export default function ViewAgency() {
 
   if (!agency) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-black text-center p-6">
+      <div className="flex bg-white dark:bg-black text-center p-6">
         <div className="text-gray-900 dark:text-gray-100">Loading agency details...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white dark:bg-black p-6 w-screen">
+    <div className="flex items-center justify-center h-screen bg-white dark:bg-black p-6 ">
       <div className="max-w-3xl w-full bg-white dark:bg-gray-900 rounded-md shadow-md p-8 text-gray-900 dark:text-gray-100">
         <h1 className="text-3xl font-bold mb-4">{agency.name}</h1>
 

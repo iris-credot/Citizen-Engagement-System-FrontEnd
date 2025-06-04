@@ -115,7 +115,7 @@ export default function AllComplaints() {
             Edit
           </button>
           <button
-            className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800"
+            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-950"
             onClick={() => handleDelete(complaint._id)}
           >
             Delete
