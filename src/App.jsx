@@ -73,7 +73,7 @@ function App() {
 
 
       {/* Protected / Admin Layout Routes */}
-      <Route path="respond-form" element={<ResponseForm />} />
+      <Route path="respond-form/:id" element={<ResponseForm />} />
       <Route path="change-status/:id" element={<ChangeStatus />} />
 
       <Route path="/admin" element={<LayoutAdmin />}>

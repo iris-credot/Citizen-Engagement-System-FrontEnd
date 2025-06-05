@@ -34,7 +34,12 @@ export default function AllComplaints() {
         }
 
         const data = await response.json();
-        setComplaints(data.complaints || []);
+       // Sort by createdAt descending
+const sortedComplaints = (data.complaints || []).sort(
+  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+);
+
+setComplaints(sortedComplaints);
       } catch (err) {
         setError(err.message);
       } finally {

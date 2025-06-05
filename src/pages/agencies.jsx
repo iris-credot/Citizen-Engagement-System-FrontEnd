@@ -56,10 +56,10 @@ useEffect(() => {
               key={agency._id}
               className="bg-white dark:bg-gray-900 shadow-md hover:shadow-lg transition-shadow rounded-2xl p-5 border border-gray-200 dark:border-gray-700"
             >
-              <h2 className="text-xl font-semibold text-black dark:text-white mb-2">
+              <h2 className="text-xl text-center font-semibold text-black dark:text-white mb-2">
                 {agency.name}
               </h2>
-              <p className="text-gray-700 dark:text-gray-300 mb-2">
+              <p className="text-gray-700 mt-4 dark:text-gray-300 mb-2">
                 {agency.description}
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">

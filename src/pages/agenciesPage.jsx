@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useDocumentTitle from "../customHooks/documentTitle";
 import axios from "axios";
-
+import toast from "react-hot-toast";
 export default function AgenciesPage() {
   useDocumentTitle("Agencies");
 
@@ -35,7 +35,37 @@ useEffect(() => {
 
   fetchAgencies();
 }, []);
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this complaint?");
+    if (!confirmDelete) return;
 
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Authentication token not found");
+
+      const response = await fetch(
+        `https://citizen-engagement-system-backend.onrender.com/api/agency/delete/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.message || "Failed to delete complaint.");
+
+      // Remove the deleted complaint from UI
+      setAgencies((prev) => prev.filter((comp) => comp._id !== id));
+
+      toast.success(data.message || "Complaint deleted successfully.");
+    } catch (err) {
+      toast.error(err.message || "An error occurred during deletion.");
+    }
+  };
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
@@ -56,10 +86,10 @@ useEffect(() => {
               key={agency._id}
               className="bg-white dark:bg-gray-900 shadow-md hover:shadow-lg transition-shadow rounded-2xl p-5 border border-gray-200 dark:border-gray-700"
             >
-              <h2 className="text-xl font-semibold text-black dark:text-white mb-2">
+              <h2 className="text-base  text-center font-extrabold text-black dark:text-white mb-2">
                 {agency.name}
               </h2>
-              <p className="text-gray-700 dark:text-gray-300 mb-2">
+              <p className="text-base font-serif mt-5 text-gray-700 dark:text-gray-300 mb-2">
                 {agency.description}
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
@@ -74,6 +104,12 @@ useEffect(() => {
                   {agency.contact_email}
                 </a>
               </p>
+                            <button
+    className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-950 mt-4"
+            onClick={() => handleDelete(agency._id)}
+          >
+            Delete
+          </button>
             </div>
           ))}
         </div>

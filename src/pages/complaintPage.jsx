@@ -39,7 +39,11 @@ export default function ComplaintsPage() {
         }
 
         const data = await response.json();
-        setComplaints(data.complaints); // <-- Use correct key
+       setComplaints(
+  Array.isArray(data.complaints)
+    ? data.complaints.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    : []
+);// <-- Use correct key
       } catch (err) {
         setError(err.message);
       } finally {

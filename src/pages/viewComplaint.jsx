@@ -66,7 +66,7 @@ export default function ViewComplaint() {
       <div className="max-w-3xl mx-auto bg-white dark:bg-[#1e1e1e] rounded-xl shadow-md p-6 mt-6 text-white border border-gray-200 dark:border-gray-700">
         
        
-        <h2 className="text-2xl font-semibold mb-4">{complaint.title}</h2>
+        <h2 className="text-2xl font-semibold mb-4"><strong>Title:</strong> {complaint.title}</h2>
 
         <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
           <p><strong>Category:</strong> {complaint.category}</p>
@@ -81,7 +81,7 @@ export default function ViewComplaint() {
         </div>
 
         <div className="mb-4">
-          <h3 className="font-semibold">Description</h3>
+          <h3 className="font-bold font-serif ">Description</h3>
           <p className="mt-1">{complaint.description}</p>
         </div>
 
@@ -95,7 +95,7 @@ export default function ViewComplaint() {
             </ul>
           </div>
         )}
-         <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800"onClick={() => navigate('/respond-form')}>
+         <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800"onClick={() => navigate(`/respond-form/${id}`)}>
                     Rensponse
                   </button>
       </div>
