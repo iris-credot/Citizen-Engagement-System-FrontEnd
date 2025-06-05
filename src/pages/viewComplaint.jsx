@@ -96,7 +96,7 @@ export default function ViewComplaint() {
           </div>
         )}
          <button className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800"onClick={() => navigate(`/respond-form/${id}`)}>
-                    Rensponse
+                    Renspond
                   </button>
       </div>
     )}

@@ -6,9 +6,6 @@ export default function ViewUser() {
   useDocumentTitle("User Details");
 
   const { id } = useParams();
-  console.log("ID:", id);
-
-  const [doctor, setDoctor] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -21,40 +18,46 @@ export default function ViewUser() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setError("");
       try {
         const token = localStorage.getItem("token");
-        console.log(`token:${token}`);
-        if (!token) throw new Error("Missing authentication token");
+        if (!token) {
+          setError("You are not authorized. Please log in.");
+          return;
+        }
 
-        const doctorRes = await fetch(
-          `https://careconnect-api-v2kw.onrender.com/api/user/getOne/${id}`,
-  {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
-  }
+        const response = await fetch(
+          `https://citizen-engagement-system-backend.onrender.com/api/user/getOne/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
-        if (!doctorRes.ok) throw new Error("Failed to fetch user");
+        if (response.status === 403) {
+          setError("Access denied. You don't have permission to view this user.");
+          return;
+        }
 
-        const doctorData = await doctorRes.json();
+        if (!response.ok) {
+          throw new Error("Something went wrong while fetching user.");
+        }
 
-        if (!doctorData.doctor) throw new Error("User not found");
+        const data = await response.json();
 
-        setDoctor(doctorData.doctor);
+        if (!data || !data.user) {
+          setError("User details not found.");
+          return;
+        }
 
-        if (!doctorData.doctor.user)
-          throw new Error("User has no user linked");
-
-        setUser(doctorData.doctor.user);
-
-        console.log("Doctor:", doctorData.doctor);
-        console.log("User:", doctorData.doctor.user);
+        console.log("Fetched user:", data.user);
+        setUser(data.user);
       } catch (err) {
-        console.error(err.message);
-        setError(err.message);
+        console.error(err);
+        setError(err.message || "An unexpected error occurred.");
       } finally {
         setLoading(false);
       }
@@ -71,7 +74,7 @@ export default function ViewUser() {
   if (error)
     return <div className="text-red-500 text-center mt-10">Error: {error}</div>;
 
-  if (!doctor)
+  if (!user)
     return <div className="text-center mt-10">User not found.</div>;
 
   return (
@@ -85,20 +88,16 @@ export default function ViewUser() {
           Personal Information
         </h3>
 
-        {user ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700 dark:text-white mt-10">
-            <p><strong>Names:</strong> {user.names ?? "N/A"}</p>
-            <p><strong>Username:</strong> {user.username ?? "N/A"}</p>
-            <p><strong>Email:</strong> {user.email ?? "N/A"}</p>
-            <p><strong>Phone:</strong> {user.phoneNumber ?? "N/A"}</p>
-            <p><strong>Address:</strong> {user.address ?? "N/A"}</p>
-            <p><strong>Gender:</strong> {user.gender ?? "N/A"}</p>
-            <p><strong>Date of Birth:</strong> {formatDate(user.dateOfBirth)}</p>
-            <p><strong>Bio:</strong> {user.bio ?? "N/A"}</p>
-          </div>
-        ) : (
-          <div className="text-gray-500">No user information found.</div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700 dark:text-white mt-10">
+          <p><strong>Names:</strong> {user.names ?? "N/A"}</p>
+          <p><strong>Username:</strong> {user.username ?? "N/A"}</p>
+          <p><strong>Email:</strong> {user.email ?? "N/A"}</p>
+          <p><strong>Phone:</strong> {user.phoneNumber ?? "N/A"}</p>
+          <p><strong>Address:</strong> {user.address ?? "N/A"}</p>
+          <p><strong>Gender:</strong> {user.gender ?? "N/A"}</p>
+          <p><strong>Date of Birth:</strong> {formatDate(user.dateOfBirth)}</p>
+          <p><strong>Bio:</strong> {user.bio ?? "N/A"}</p>
+        </div>
       </div>
     </div>
   );
