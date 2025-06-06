@@ -18,6 +18,10 @@ import {
 export default function SideBarAdmin() {
    const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+const agencyId = user?.agency_id?._id;
+
+console.log("user object:", user);
+
   const toggleSidebar = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
  const baseLinkClasses = "flex items-center px-4 py-2 rounded-md transition-colors duration-200  dark:text-white text-black hover:bg-[#FFB640] hover:text-black";
@@ -99,7 +103,7 @@ const handleLogout = async () => {
           <NavLink to="/admin/dashboard" className={linkClasses}>
             <FontAwesomeIcon icon={faHome} className="mr-4" /> Home
           </NavLink>
-          <NavLink to="/admin/complaints/:agencyId" className={linkClasses}>
+          <NavLink to={`/admin/complaints/${agencyId}`} className={linkClasses}>
             <FontAwesomeIcon icon={faCalendarCheck} className="mr-4" /> Complaints
           </NavLink>
           <NavLink to="/admin/profile/:id" className={linkClasses}>
@@ -137,7 +141,7 @@ const handleLogout = async () => {
           <NavLink to="/admin/dashboard" className={linkClasses} onClick={toggleSidebar}>
             <FontAwesomeIcon icon={faHome} className="mr-4" /> Home
           </NavLink>
-          <NavLink to="/admin/complaints/:agencyId" className={linkClasses} onClick={toggleSidebar}>
+          <NavLink to={`/admin/complaints/${agencyId}`} className={linkClasses} onClick={toggleSidebar}>
             <FontAwesomeIcon icon={faCalendarCheck} className="mr-4" /> Complaints
           </NavLink>
           <NavLink to="/admin/profile/:id" className={linkClasses} onClick={toggleSidebar}>

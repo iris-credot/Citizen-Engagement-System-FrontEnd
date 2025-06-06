@@ -78,7 +78,7 @@ export default function ViewUser() {
     return <div className="text-center mt-10">User not found.</div>;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4 dark:bg-black">
+    <div className="flex justify-center items-center h-full bg-gray-100 p-4 dark:bg-black">
       <div className="bg-white shadow-lg rounded-2xl w-full max-w-3xl p-6 space-y-6 dark:bg-black">
         <h2 className="text-3xl font-bold text-start text-gray-800 dark:text-white">
           Citizen Details
