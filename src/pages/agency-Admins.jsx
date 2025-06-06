@@ -89,7 +89,7 @@ export default function AgencyAdmins() {
         </thead>
         <tbody>
           {admins.map((admin) => (
-            <tr key={admin._id} className="hover:bg-gray-500">
+            <tr key={admin._id} className="hover:bg-gray-200 dark:hover:bg-gray-500">
               <td className="border border-gray-300 p-2">{admin.names}</td>
               <td className="border border-gray-300 p-2">{admin.email}</td>
                <td className="border border-gray-300 p-2">  {admin.agency_id ? admin.agency_id.name : "N/A"}</td>

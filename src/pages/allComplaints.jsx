@@ -101,7 +101,7 @@ setComplaints(sortedComplaints);
           </thead>
           <tbody>
             {complaints.map((complaint, idx) => (
-              <tr key={idx} className="">
+              <tr key={idx} className="hover:bg-gray-200 dark:hover:bg-gray-500">
                   <td className="border border-gray-300 p-2 whitespace-normal break-words text-sm sm:text-base">{complaint.title}</td>
                 <td className="border border-gray-300 p-2">{complaint.category}</td>
                 <td className="border border-gray-300 p-2">{complaint.status}</td>

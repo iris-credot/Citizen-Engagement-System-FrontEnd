@@ -81,7 +81,7 @@ export default function CitizensPage() {
         </thead>
         <tbody>
           {citizens.map((citizen, index) => (
-            <tr key={index} className="hover:bg-gray-500">
+            <tr key={index} className="hover:bg-gray-200 dark:hover:bg-gray-500">
               <td className="border border-gray-300 p-2">{citizen.names}</td>
               <td className="border border-gray-300 p-2">{citizen.email}</td>
               <td className="border border-gray-300 p-2 text-center space-x-2">
