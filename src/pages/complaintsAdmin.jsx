@@ -107,8 +107,10 @@ console.log("agencyId from URL:", agencyId);
           <p className="text-center text-gray-500 dark:text-gray-400">
             No complaints found for this agency.
           </p>
-        ) : (
-          complaints.map((complaint) => (
+        ) :  (
+  [...complaints]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .map((complaint) =>  (
             <div
               key={complaint._id}
               className="bg-white dark:bg-[#1e1e1e] rounded-xl shadow p-5 border border-gray-200 dark:border-gray-700"
